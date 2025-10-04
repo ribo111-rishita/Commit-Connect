@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Auth from "./components/Auth";
 import Quiz from "./components/Quiz";
 import Chat from "./components/Chat";
+import RoleSelection from "./components/RoleSelection";
 
 // temporary swipe mock
 function MentorSwipe({ onSelectMentor }) {
@@ -47,6 +48,7 @@ export default function App() {
   const [user, setUser] = useState(null);
   const [mentor, setMentor] = useState(null);
   const [quizScore, setQuizScore] = useState(null);
+  const [role, setRole] = useState(null); // new state for role
 
   return (
     <div>
@@ -54,7 +56,16 @@ export default function App() {
         <Auth
           onLogin={(email) => {
             setUser(email);
-            setStage("swipe");
+            setStage("role"); // go to RoleSelection after auth
+          }}
+        />
+      )}
+
+      {stage === "role" && (
+        <RoleSelection
+          onSelectRole={(selectedRole) => {
+            setRole(selectedRole);
+            setStage("swipe"); // proceed to mentor swipe
           }}
         />
       )}
@@ -78,7 +89,7 @@ export default function App() {
       )}
 
       {stage === "chat" && (
-        <Chat user={user} mentor={mentor} score={quizScore} />
+        <Chat user={user} mentor={mentor} score={quizScore} role={role} />
       )}
     </div>
   );

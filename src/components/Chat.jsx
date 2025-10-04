@@ -1,92 +1,218 @@
 import React, { useState } from "react";
+import logo from "../assets/img.png"; // 🟢 make sure img.png exists
 
-export default function Chat() {
-  const [messages, setMessages] = useState([]);
-  const [text, setText] = useState("");
+const Auth = ({ onAuth }) => {
+  const [showPopup, setShowPopup] = useState(false);
 
-  const chatBoxStyle = {
-    border: "1px solid rgba(182,255,13,0.3)",
-    borderRadius: "12px",
-    background: "#0b0b0b", // dark background
+  const containerStyle = {
+    backgroundColor: "#0a0a0a",
+    color: "#fff",
+    minHeight: "100vh",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+    alignItems: "center",
+    fontFamily: "'Poppins', sans-serif",
+    filter: showPopup ? "blur(5px)" : "none",
+    pointerEvents: showPopup ? "none" : "auto",
+  };
+
+  const navbarStyle = {
     width: "100%",
-    height: "250px",
-    margin: "15px auto",
-    padding: "10px",
-    overflowY: "auto",
-    textAlign: "left",
-    color: "#fff",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: "20px 60px",
+    borderBottom: "1px solid #1f1f1f",
   };
 
-  const messageStyle = {
-    background: "#1a1a1a", // darker gray for bubbles
-    padding: "8px 12px",
-    margin: "6px 0",
-    borderRadius: "10px",
-    maxWidth: "70%",
-    border: "1px solid #b6ff0d", // neon green border
-    color: "#fff",
-    fontSize: "0.95rem",
+  const logoContainerStyle = {
+    display: "flex",
+    alignItems: "center",
+    gap: "10px",
   };
 
-  const inputStyle = {
-    padding: "10px",
-    margin: "10px 5px 0 0",
-    border: "1px solid rgba(182,255,13,0.3)",
+  const logoImageStyle = {
+    width: "40px",
+    height: "40px",
     borderRadius: "8px",
-    width: "70%",
-    background: "#1a1a1a",
+    objectFit: "cover",
+  };
+
+  const logoTextStyle = {
+    color: "#c4ff00",
+    fontSize: "22px",
+    fontWeight: "700",
+  };
+
+  const navLinksStyle = {
+    display: "flex",
+    gap: "40px",
+    alignItems: "center",
     color: "#fff",
-    outline: "none",
+    fontSize: "15px",
   };
 
   const buttonStyle = {
-    padding: "10px 18px",
-    marginTop: "10px",
+    backgroundColor: "#c4ff00",
     border: "none",
-    borderRadius: "8px",
-    background: "#b6ff0d", // neon green button
-    color: "#000",
+    padding: "8px 18px",
+    borderRadius: "6px",
     fontWeight: "600",
     cursor: "pointer",
-    transition: "all 0.3s ease",
   };
 
-  const buttonHover = {
-    background: "#d0ff4a",
-    boxShadow: "0 0 10px rgba(182,255,13,0.6)",
+  const authBoxStyle = {
+    flexGrow: 1,
+    display: "flex",
+    justifyContent: "flex-end",
+    alignItems: "center",
+    width: "100%",
+    paddingRight: "10%",
   };
 
-  const [hover, setHover] = useState(false);
+  const cardStyle = {
+    backgroundColor: "#111",
+    padding: "40px",
+    borderRadius: "15px",
+    boxShadow: "0 0 20px rgba(0,0,0,0.4)",
+    width: "350px",
+    textAlign: "center",
+  };
 
-  const send = () => {
-    if (text.trim() === "") return;
-    setMessages([...messages, text]);
-    setText("");
+  const inputStyle = {
+    width: "100%",
+    padding: "10px",
+    margin: "10px 0",
+    borderRadius: "6px",
+    border: "1px solid #2f2f2f",
+    backgroundColor: "#0e0e0e",
+    color: "#fff",
+  };
+
+  const continueBtnStyle = {
+    ...buttonStyle,
+    width: "100%",
+    marginTop: "10px",
+  };
+
+  const popupOverlayStyle = {
+    position: "fixed",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+    background: "rgba(0,0,0,0.6)",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "stretch", // ✅ allows full height
+    zIndex: 1000,
+  };
+
+  const popupBoxStyle = {
+    background: "#111",
+    padding: "50px",
+    borderRadius: "20px",
+    textAlign: "center",
+    color: "white",
+    width: "400px",
+    height: "100vh", // ✅ fills full page height
+    boxShadow: "0 0 30px rgba(0,0,0,0.6)",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+  };
+  // ✅ Buttons now have green background
+  const roleBtnStyle = {
+    margin: "15px",
+    padding: "12px 25px",
+    border: "none",
+    borderRadius: "10px",
+    cursor: "pointer",
+    color: "white",
+    fontWeight: "600",
+    background: "#4caf50", // ✅ solid green for both
+    width: "120px",
+  };
+
+  const handleContinue = () => {
+    setShowPopup(true);
+  };
+
+  const handleRoleSelect = (role) => {
+    setShowPopup(false);
+    window.location.href = `/profile?role=${role}`;
   };
 
   return (
-    <div style={{ fontFamily: "Poppins, sans-serif", color: "#fff" }}>
-      <h2 style={{ color: "#b6ff0d" }}>Chat</h2>
-      <div style={chatBoxStyle}>
-        {messages.length === 0 && <p style={{ color: "#777" }}>No messages yet...</p>}
-        {messages.map((m, i) => (
-          <div key={i} style={messageStyle}>{m}</div>
-        ))}
+    <>
+      {/* Main Auth Page */}
+      <div style={containerStyle}>
+        {/* Navbar */}
+        <div style={navbarStyle}>
+          <div style={logoContainerStyle}>
+            <img src={logo} alt="Commit&Connect Logo" style={logoImageStyle} />
+            <span style={logoTextStyle}>Commit&Connect</span>
+          </div>
+          <div style={navLinksStyle}>
+            <span>About</span>
+            <span>Timeline</span>
+            <span>Contact</span>
+            <span>FAQs</span>
+            <button style={buttonStyle}>Login</button>
+          </div>
+        </div>
+
+        {/* Auth Section */}
+        <div style={authBoxStyle}>
+          <div style={cardStyle}>
+            <h2>Welcome to Commit Connect</h2>
+            <p style={{ color: "#aaa", fontSize: "14px" }}>
+              Connect with open-source mentors and start building 🚀
+            </p>
+
+            <input type="email" placeholder="Enter your email" style={inputStyle} />
+            <input
+              type="password"
+              placeholder="Enter your password"
+              style={inputStyle}
+            />
+            <button style={continueBtnStyle} onClick={handleContinue}>
+              Continue
+            </button>
+
+            <p style={{ color: "#c4ff00", fontSize: "13px", marginTop: "15px" }}>
+              New to open source?{" "}
+              <span style={{ textDecoration: "underline" }}>Let’s begin.</span>
+            </p>
+          </div>
+        </div>
       </div>
-      <input
-        style={inputStyle}
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-        placeholder="Type a message..."
-      />
-      <button
-        style={{ ...buttonStyle, ...(hover ? buttonHover : {}) }}
-        onClick={send}
-        onMouseEnter={() => setHover(true)}
-        onMouseLeave={() => setHover(false)}
-      >
-        Send
-      </button>
-    </div>
+
+      {/* Popup Modal */}
+      {showPopup && (
+        <div style={popupOverlayStyle}>
+          <div style={popupBoxStyle}>
+            <h3 style={{ marginBottom: "20px" }}>Are you a Student or a Mentor?</h3>
+            <div>
+              <button
+                style={roleBtnStyle}
+                onClick={() => handleRoleSelect("student")}
+              >
+                Student
+              </button>
+              <button
+                style={roleBtnStyle}
+                onClick={() => handleRoleSelect("mentor")}
+              >
+                Mentor
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
-}
+};
+
+export default Auth;

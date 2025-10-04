@@ -1,6 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
+import logo from "../assets/img.png"; // 🟢 make sure img.png exists
 
-const Auth = ({ onAuth }) => {
+const Auth = ({ onLogin }) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   const containerStyle = {
     backgroundColor: "#0a0a0a",
     color: "#fff",
@@ -21,7 +25,20 @@ const Auth = ({ onAuth }) => {
     borderBottom: "1px solid #1f1f1f",
   };
 
-  const logoStyle = {
+  const logoContainerStyle = {
+    display: "flex",
+    alignItems: "center",
+    gap: "10px",
+  };
+
+  const logoImageStyle = {
+    width: "40px",
+    height: "40px",
+    borderRadius: "8px",
+    objectFit: "cover",
+  };
+
+  const logoTextStyle = {
     color: "#c4ff00",
     fontSize: "22px",
     fontWeight: "700",
@@ -30,6 +47,7 @@ const Auth = ({ onAuth }) => {
   const navLinksStyle = {
     display: "flex",
     gap: "40px",
+    alignItems: "center",
     color: "#fff",
     fontSize: "15px",
   };
@@ -77,11 +95,20 @@ const Auth = ({ onAuth }) => {
     marginTop: "10px",
   };
 
+  const handleContinue = () => {
+    if (!email) return alert("Please enter your email!");
+    // Call onLogin prop passed from App.jsx
+    onLogin(email);
+  };
+
   return (
     <div style={containerStyle}>
       {/* Navbar */}
       <div style={navbarStyle}>
-        <div style={logoStyle}>Commit&Connect</div>
+        <div style={logoContainerStyle}>
+          <img src={logo} alt="Commit&Connect Logo" style={logoImageStyle} />
+          <span style={logoTextStyle}>Commit&Connect</span>
+        </div>
         <div style={navLinksStyle}>
           <span>About</span>
           <span>Timeline</span>
@@ -96,21 +123,30 @@ const Auth = ({ onAuth }) => {
         <div style={cardStyle}>
           <h2>Welcome to Commit Connect</h2>
           <p style={{ color: "#aaa", fontSize: "14px" }}>
-            Connect with open-source mentors and start building 🚀
+            Connect with open-source mentors and start building 
           </p>
 
-          <input type="email" placeholder="Enter your email" style={inputStyle} />
+          <input
+            type="email"
+            placeholder="Enter your email"
+            style={inputStyle}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
           <input
             type="password"
             placeholder="Enter your password"
             style={inputStyle}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
-          <button style={continueBtnStyle} onClick={onAuth}>
+          <button style={continueBtnStyle} onClick={handleContinue}>
             Continue
           </button>
 
           <p style={{ color: "#c4ff00", fontSize: "13px", marginTop: "15px" }}>
-            New to open source? <span style={{ textDecoration: "underline" }}>Let’s begin.</span>
+            New to open source?{" "}
+            <span style={{ textDecoration: "underline" }}>Let’s begin.</span>
           </p>
         </div>
       </div>
