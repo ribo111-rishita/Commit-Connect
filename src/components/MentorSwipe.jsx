@@ -10,25 +10,46 @@ export default function MentorSwipe({ onSwipeRight }) {
   const [index, setIndex] = useState(0);
   const mentor = mentors[index];
 
-  if (!mentor) return <p style={{ color: "#7b0f1d", fontWeight: "600" }}>All mentors swiped! ✅</p>;
+  const cardStyle = {
+    border: "1px solid #ddd",
+    borderRadius: "12px",
+    background: "#fff",
+    padding: "20px",
+    margin: "15px 0",
+    boxShadow: "0 5px 15px rgba(0,0,0,0.1)",
+  };
+
+  const buttonStyle = {
+    padding: "10px 18px",
+    margin: "8px",
+    border: "none",
+    borderRadius: "8px",
+    background: "#7b0f1d",
+    color: "#fff",
+    fontWeight: "600",
+    cursor: "pointer",
+  };
+
+  if (!mentor)
+    return <p style={{ color: "#7b0f1d", fontWeight: "600" }}>All mentors swiped! ✅</p>;
 
   return (
-    <div className="mentor-card">
-      <h3>{mentor.name}</h3>
+    <div style={cardStyle}>
+      <h3 style={{ color: "#7b0f1d" }}>{mentor.name}</h3>
       <p><strong>Skills:</strong> {mentor.skills}</p>
       <p>{mentor.bio}</p>
-
-      <div>
-        <button onClick={() => setIndex(index + 1)}>Skip</button>
-        <button
-          onClick={() => {
-            onSwipeRight(mentor);
-            setIndex(index + 1);
-          }}
-        >
-          Apply
-        </button>
-      </div>
+      <button style={buttonStyle} onClick={() => setIndex(index + 1)}>
+        Skip
+      </button>
+      <button
+        style={buttonStyle}
+        onClick={() => {
+          onSwipeRight(mentor);
+          setIndex(index + 1);
+        }}
+      >
+        Apply
+      </button>
     </div>
   );
 }
