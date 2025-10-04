@@ -1,54 +1,15 @@
 import React, { useState } from "react";
 import Auth from "./components/Auth";
-import Quiz from "./components/Quiz";
-import Chat from "./components/Chat";
 import RoleSelection from "./components/RoleSelection";
-
-// temporary swipe mock
-function MentorSwipe({ onSelectMentor }) {
-  const mentors = ["Alice", "Bob", "Charlie"];
-
-  const styles = {
-    container: {
-      backgroundColor: "#0b0b0b",
-      color: "#fff",
-      fontFamily: "Poppins, sans-serif",
-      minHeight: "100vh",
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      justifyContent: "center",
-    },
-    button: {
-      margin: "10px",
-      padding: "12px 20px",
-      border: "none",
-      borderRadius: "10px",
-      backgroundColor: "#b6ff0d",
-      color: "#000",
-      fontWeight: "600",
-      cursor: "pointer",
-    },
-  };
-
-  return (
-    <div style={styles.container}>
-      <h2 style={{ color: "#b6ff0d" }}>Choose a Mentor</h2>
-      {mentors.map((m, i) => (
-        <button key={i} style={styles.button} onClick={() => onSelectMentor(m)}>
-          {m}
-        </button>
-      ))}
-    </div>
-  );
-}
+import Profile from "./components/Profile";
+import MentorSwipe from "./components/MentorSwipe";
 
 export default function App() {
   const [stage, setStage] = useState("auth");
   const [user, setUser] = useState(null);
-  const [mentor, setMentor] = useState(null);
-  const [quizScore, setQuizScore] = useState(null);
-  const [role, setRole] = useState(null); // new state for role
+  const [role, setRole] = useState(null);
+  const [profileData, setProfileData] = useState(null);
+  const [selectedMentor, setSelectedMentor] = useState(null);
 
   return (
     <div>
@@ -56,7 +17,7 @@ export default function App() {
         <Auth
           onLogin={(email) => {
             setUser(email);
-            setStage("role"); // go to RoleSelection after auth
+            setStage("role");
           }}
         />
       )}
@@ -65,31 +26,34 @@ export default function App() {
         <RoleSelection
           onSelectRole={(selectedRole) => {
             setRole(selectedRole);
-            setStage("swipe"); // proceed to mentor swipe
+            setStage("profile");
+          }}
+        />
+      )}
+
+      {stage === "profile" && role === "student" && (
+        <Profile
+          userEmail={user}
+          onSubmitProfile={(data) => {
+            setProfileData(data);
+            setStage("swipe"); // go to mentor swipe
           }}
         />
       )}
 
       {stage === "swipe" && (
         <MentorSwipe
-          onSelectMentor={(m) => {
-            setMentor(m);
-            setStage("quiz");
+          mentors={[
+            { name: "Alice", bio: "Frontend expert" },
+            { name: "Bob", bio: "Backend guru" },
+            { name: "Charlie", bio: "Fullstack wizard" },
+          ]}
+          onSelectMentor={(mentor) => {
+            setSelectedMentor(mentor);
+            alert(`You selected ${mentor.name}!`);
+            // You can proceed to chat/next stage here
           }}
         />
-      )}
-
-      {stage === "quiz" && (
-        <Quiz
-          onComplete={(score) => {
-            setQuizScore(score);
-            setStage("chat");
-          }}
-        />
-      )}
-
-      {stage === "chat" && (
-        <Chat user={user} mentor={mentor} score={quizScore} role={role} />
       )}
     </div>
   );

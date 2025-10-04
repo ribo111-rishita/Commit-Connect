@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import logo from "../assets/img.png"; // 🟢 make sure img.png exists
+import Navbar from "./Navbar"; // import the separated Navbar
 
 const Auth = ({ onLogin }) => {
   const [email, setEmail] = useState("");
@@ -11,63 +11,42 @@ const Auth = ({ onLogin }) => {
     minHeight: "100vh",
     display: "flex",
     flexDirection: "column",
-    justifyContent: "space-between",
-    alignItems: "center",
     fontFamily: "'Poppins', sans-serif",
   };
 
-  const navbarStyle = {
-    width: "100%",
+  const mainSectionStyle = {
+    flexGrow: 1,
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    padding: "20px 60px",
-    borderBottom: "1px solid #1f1f1f",
+    padding: "0 10%",
   };
 
-  const logoContainerStyle = {
-    display: "flex",
-    alignItems: "center",
-    gap: "10px",
+  const leftTextStyle = {
+    flex: 1,
+    paddingRight: "40px",
   };
 
-  const logoImageStyle = {
-    width: "40px",
-    height: "40px",
-    borderRadius: "8px",
-    objectFit: "cover",
+  const headingStyle = {
+    fontSize: "64px",  
+    fontWeight: "800",  
+    color: "#b6ff0d",
+    marginBottom: "20px",
+    lineHeight: "1.2",
   };
 
-  const logoTextStyle = {
-    color: "#c4ff00",
-    fontSize: "22px",
-    fontWeight: "700",
-  };
-
-  const navLinksStyle = {
-    display: "flex",
-    gap: "40px",
-    alignItems: "center",
-    color: "#fff",
-    fontSize: "15px",
-  };
-
-  const buttonStyle = {
-    backgroundColor: "#c4ff00",
-    border: "none",
-    padding: "8px 18px",
-    borderRadius: "6px",
-    fontWeight: "600",
-    cursor: "pointer",
+  const subTextStyle = {
+    fontSize: "18px",
+    color: "#aaa",
+    marginBottom: "12px",
+    maxWidth: "400px",
+    lineHeight: "1.6",
   };
 
   const authBoxStyle = {
-    flexGrow: 1,
+    flex: 1,
     display: "flex",
     justifyContent: "flex-end",
-    alignItems: "center",
-    width: "100%",
-    paddingRight: "10%",
   };
 
   const cardStyle = {
@@ -89,65 +68,79 @@ const Auth = ({ onLogin }) => {
     color: "#fff",
   };
 
-  const continueBtnStyle = {
-    ...buttonStyle,
+  const buttonStyle = {
+    backgroundColor: "#c4ff00",
+    border: "none",
+    padding: "8px 18px",
+    borderRadius: "6px",
+    fontWeight: "600",
+    cursor: "pointer",
     width: "100%",
     marginTop: "10px",
   };
 
   const handleContinue = () => {
     if (!email) return alert("Please enter your email!");
-    // Call onLogin prop passed from App.jsx
     onLogin(email);
   };
 
   return (
     <div style={containerStyle}>
       {/* Navbar */}
-      <div style={navbarStyle}>
-        <div style={logoContainerStyle}>
-          <img src={logo} alt="Commit&Connect Logo" style={logoImageStyle} />
-          <span style={logoTextStyle}>Commit&Connect</span>
-        </div>
-        <div style={navLinksStyle}>
-          <span>About</span>
-          <span>Timeline</span>
-          <span>Contact</span>
-          <span>FAQs</span>
-          <button style={buttonStyle}>Login</button>
-        </div>
-      </div>
+      <Navbar />
 
-      {/* Auth Section */}
-      <div style={authBoxStyle}>
-        <div style={cardStyle}>
-          <h2>Welcome to Commit Connect</h2>
-          <p style={{ color: "#aaa", fontSize: "14px" }}>
-            Connect with open-source mentors and start building 
+      {/* Main Section */}
+      <div style={mainSectionStyle}>
+        {/* Left Side Text */}
+        <div style={leftTextStyle}>
+          <h1 style={headingStyle}>Build. Connect. Grow.</h1>
+          <p style={subTextStyle}>
+            Find mentors who guide you through real open-source contributions.
           </p>
-
-          <input
-            type="email"
-            placeholder="Enter your email"
-            style={inputStyle}
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <input
-            type="password"
-            placeholder="Enter your password"
-            style={inputStyle}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <button style={continueBtnStyle} onClick={handleContinue}>
-            Continue
-          </button>
-
-          <p style={{ color: "#c4ff00", fontSize: "13px", marginTop: "15px" }}>
-            New to open source?{" "}
-            <span style={{ textDecoration: "underline" }}>Let’s begin.</span>
+          <p style={subTextStyle}>
+            Take skill quizzes & get matched with the right mentor.
           </p>
+          <p style={subTextStyle}>
+            Build your portfolio with projects & showcase your skills.
+          </p>
+          <p style={{ color: "#b6ff0d", fontSize: "16px", marginTop: "20px" }}>
+            💡 Your journey into open-source starts here.
+          </p>
+        </div>
+
+        {/* Right Side Auth Box */}
+        <div style={authBoxStyle}>
+          <div style={cardStyle}>
+            <h2>Welcome to Commit Connect</h2>
+            <p style={{ color: "#aaa", fontSize: "14px" }}>
+              Connect with open-source mentors and start building
+            </p>
+
+            <input
+              type="email"
+              placeholder="Enter your email"
+              style={inputStyle}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <input
+              type="password"
+              placeholder="Enter your password"
+              style={inputStyle}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <button style={buttonStyle} onClick={handleContinue}>
+              Continue
+            </button>
+
+            <p style={{ color: "#c4ff00", fontSize: "13px", marginTop: "15px" }}>
+              New to open source?{" "}
+              <span style={{ textDecoration: "underline", cursor: "pointer" }}>
+                Let’s begin.
+              </span>
+            </p>
+          </div>
         </div>
       </div>
     </div>

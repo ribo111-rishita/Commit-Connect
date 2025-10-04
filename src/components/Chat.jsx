@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import logo from "../assets/img.png"; // 🟢 make sure img.png exists
+import logo from "../assets/img.png"; 
 
 const Auth = ({ onAuth }) => {
   const [showPopup, setShowPopup] = useState(false);
@@ -105,8 +105,7 @@ const Auth = ({ onAuth }) => {
     background: "rgba(0,0,0,0.6)",
     display: "flex",
     justifyContent: "center",
-    alignItems: "stretch", // ✅ allows full height
-    zIndex: 1000,
+    alignItems: "stretch", 
   };
 
   const popupBoxStyle = {
@@ -116,13 +115,13 @@ const Auth = ({ onAuth }) => {
     textAlign: "center",
     color: "white",
     width: "400px",
-    height: "100vh", // ✅ fills full page height
+    height: "100vh", 
     boxShadow: "0 0 30px rgba(0,0,0,0.6)",
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
   };
-  // ✅ Buttons now have green background
+ 
   const roleBtnStyle = {
     margin: "15px",
     padding: "12px 25px",
@@ -131,7 +130,7 @@ const Auth = ({ onAuth }) => {
     cursor: "pointer",
     color: "white",
     fontWeight: "600",
-    background: "#4caf50", // ✅ solid green for both
+    background: "#4caf50", 
     width: "120px",
   };
 
