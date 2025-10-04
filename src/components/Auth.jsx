@@ -1,142 +1,119 @@
-import React, { useState } from "react";
+import React from "react";
 
-const Auth = ({ onLogin }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (email && password) {
-      onLogin(email);
-    } else {
-      alert("Please enter both email and password!");
-    }
+const Auth = ({ onAuth }) => {
+  const containerStyle = {
+    backgroundColor: "#0a0a0a",
+    color: "#fff",
+    minHeight: "100vh",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+    alignItems: "center",
+    fontFamily: "'Poppins', sans-serif",
   };
 
-  const styles = {
-    container: {
-      backgroundColor: "#0b0b0b",
-      color: "#ffffff",
-      fontFamily: "Poppins, sans-serif",
-      minHeight: "100vh",
-      width: "100vw", // full screen width
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      justifyContent: "center",
-      padding: "0 20px", // so inputs don’t hit screen edges
-    },
-    title: {
-      fontSize: "2rem",
-      fontWeight: "700",
-      marginBottom: "10px",
-      textAlign: "center",
-    },
-    subtitle: {
-      fontSize: "1rem",
-      color: "#aaaaaa",
-      marginBottom: "30px",
-      textAlign: "center",
-    },
-    input: {
-      width: "100%",
-      maxWidth: "400px", // keep it readable
-      padding: "14px",
-      marginBottom: "20px",
-      borderRadius: "10px",
-      border: "1px solid rgba(182,255,13,0.3)",
-      backgroundColor: "#1a1a1a",
-      color: "#ffffff",
-      fontSize: "1rem",
-      outline: "none",
-    },
-    inputFocus: {
-      border: "1px solid #b6ff0d",
-      boxShadow: "0 0 8px rgba(182,255,13,0.5)",
-    },
-    button: {
-      width: "100%",
-      maxWidth: "400px",
-      backgroundColor: "#b6ff0d",
-      color: "#000000",
-      padding: "14px",
-      borderRadius: "12px",
-      border: "none",
-      fontWeight: "600",
-      fontSize: "1.05rem",
-      cursor: "pointer",
-      transition: "all 0.3s ease",
-    },
-    buttonHover: {
-      backgroundColor: "#d0ff4a",
-      boxShadow: "0 0 15px rgba(182,255,13,0.6)",
-    },
-    footer: {
-      marginTop: "25px",
-      fontSize: "0.95rem",
-      color: "#aaaaaa",
-      textAlign: "center",
-    },
-    accent: {
-      color: "#b6ff0d",
-      fontWeight: "600",
-      cursor: "pointer",
-    },
+  const navbarStyle = {
+    width: "100%",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: "20px 60px",
+    borderBottom: "1px solid #1f1f1f",
   };
 
-  const [inputFocus, setInputFocus] = useState({ email: false, password: false });
-  const [hover, setHover] = useState(false);
+  const logoStyle = {
+    color: "#c4ff00",
+    fontSize: "22px",
+    fontWeight: "700",
+  };
+
+  const navLinksStyle = {
+    display: "flex",
+    gap: "40px",
+    color: "#fff",
+    fontSize: "15px",
+  };
+
+  const buttonStyle = {
+    backgroundColor: "#c4ff00",
+    border: "none",
+    padding: "8px 18px",
+    borderRadius: "6px",
+    fontWeight: "600",
+    cursor: "pointer",
+  };
+
+  const authBoxStyle = {
+    flexGrow: 1,
+    display: "flex",
+    justifyContent: "flex-end",
+    alignItems: "center",
+    width: "100%",
+    paddingRight: "10%",
+  };
+
+  const cardStyle = {
+    backgroundColor: "#111",
+    padding: "40px",
+    borderRadius: "15px",
+    boxShadow: "0 0 20px rgba(0,0,0,0.4)",
+    width: "350px",
+    textAlign: "center",
+  };
+
+  const inputStyle = {
+    width: "100%",
+    padding: "10px",
+    margin: "10px 0",
+    borderRadius: "6px",
+    border: "1px solid #2f2f2f",
+    backgroundColor: "#0e0e0e",
+    color: "#fff",
+  };
+
+  const continueBtnStyle = {
+    ...buttonStyle,
+    width: "100%",
+    marginTop: "10px",
+  };
 
   return (
-    <div style={styles.container}>
-      <h1 style={styles.title}>Welcome to Commit Connect</h1>
-      <p style={styles.subtitle}>
-        Connect with open-source mentors and start building 🚀
-      </p>
+    <div style={containerStyle}>
+      {/* Navbar */}
+      <div style={navbarStyle}>
+        <div style={logoStyle}>Commit&Connect</div>
+        <div style={navLinksStyle}>
+          <span>About</span>
+          <span>Timeline</span>
+          <span>Contact</span>
+          <span>FAQs</span>
+          <button style={buttonStyle}>Login</button>
+        </div>
+      </div>
 
-      <form onSubmit={handleSubmit} style={{ width: "100%", maxWidth: "400px" }}>
-        <input
-          type="email"
-          placeholder="Enter your email"
-          style={{
-            ...styles.input,
-            ...(inputFocus.email ? styles.inputFocus : {}),
-          }}
-          onFocus={() => setInputFocus({ ...inputFocus, email: true })}
-          onBlur={() => setInputFocus({ ...inputFocus, email: false })}
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
+      {/* Auth Section */}
+      <div style={authBoxStyle}>
+        <div style={cardStyle}>
+          <h2>Welcome to Commit Connect</h2>
+          <p style={{ color: "#aaa", fontSize: "14px" }}>
+            Connect with open-source mentors and start building 🚀
+          </p>
 
-        <input
-          type="password"
-          placeholder="Enter your password"
-          style={{
-            ...styles.input,
-            ...(inputFocus.password ? styles.inputFocus : {}),
-          }}
-          onFocus={() => setInputFocus({ ...inputFocus, password: true })}
-          onBlur={() => setInputFocus({ ...inputFocus, password: false })}
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+          <input type="email" placeholder="Enter your email" style={inputStyle} />
+          <input
+            type="password"
+            placeholder="Enter your password"
+            style={inputStyle}
+          />
+          <button style={continueBtnStyle} onClick={onAuth}>
+            Continue
+          </button>
 
-        <button
-          type="submit"
-          style={{
-            ...styles.button,
-            ...(hover ? styles.buttonHover : {}),
-          }}
-          onMouseEnter={() => setHover(true)}
-          onMouseLeave={() => setHover(false)}
-        >
-          Continue
-        </button>
-      </form>
-
-      <p style={styles.footer}>
-        New to open source? <span style={styles.accent}>Let’s begin.</span>
-      </p>
+          <p style={{ color: "#c4ff00", fontSize: "13px", marginTop: "15px" }}>
+            New to open source? <span style={{ textDecoration: "underline" }}>Let’s begin.</span>
+          </p>
+        </div>
+      </div>
     </div>
   );
 };

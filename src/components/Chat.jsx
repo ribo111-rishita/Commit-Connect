@@ -5,31 +5,38 @@ export default function Chat() {
   const [text, setText] = useState("");
 
   const chatBoxStyle = {
-    border: "1px solid #ddd",
+    border: "1px solid rgba(182,255,13,0.3)",
     borderRadius: "12px",
-    background: "#fafafa",
+    background: "#0b0b0b", // dark background
     width: "100%",
     height: "250px",
     margin: "15px auto",
     padding: "10px",
     overflowY: "auto",
     textAlign: "left",
+    color: "#fff",
   };
 
   const messageStyle = {
-    background: "#ffe4e1",
+    background: "#1a1a1a", // darker gray for bubbles
     padding: "8px 12px",
     margin: "6px 0",
     borderRadius: "10px",
     maxWidth: "70%",
+    border: "1px solid #b6ff0d", // neon green border
+    color: "#fff",
+    fontSize: "0.95rem",
   };
 
   const inputStyle = {
     padding: "10px",
     margin: "10px 5px 0 0",
-    border: "1px solid #ccc",
+    border: "1px solid rgba(182,255,13,0.3)",
     borderRadius: "8px",
     width: "70%",
+    background: "#1a1a1a",
+    color: "#fff",
+    outline: "none",
   };
 
   const buttonStyle = {
@@ -37,11 +44,19 @@ export default function Chat() {
     marginTop: "10px",
     border: "none",
     borderRadius: "8px",
-    background: "#7b0f1d",
-    color: "#fff",
+    background: "#b6ff0d", // neon green button
+    color: "#000",
     fontWeight: "600",
     cursor: "pointer",
+    transition: "all 0.3s ease",
   };
+
+  const buttonHover = {
+    background: "#d0ff4a",
+    boxShadow: "0 0 10px rgba(182,255,13,0.6)",
+  };
+
+  const [hover, setHover] = useState(false);
 
   const send = () => {
     if (text.trim() === "") return;
@@ -50,10 +65,10 @@ export default function Chat() {
   };
 
   return (
-    <div>
-      <h2 style={{ color: "#7b0f1d" }}>Chat</h2>
+    <div style={{ fontFamily: "Poppins, sans-serif", color: "#fff" }}>
+      <h2 style={{ color: "#b6ff0d" }}>Chat</h2>
       <div style={chatBoxStyle}>
-        {messages.length === 0 && <p style={{ color: "#888" }}>No messages yet...</p>}
+        {messages.length === 0 && <p style={{ color: "#777" }}>No messages yet...</p>}
         {messages.map((m, i) => (
           <div key={i} style={messageStyle}>{m}</div>
         ))}
@@ -64,7 +79,14 @@ export default function Chat() {
         onChange={(e) => setText(e.target.value)}
         placeholder="Type a message..."
       />
-      <button style={buttonStyle} onClick={send}>Send</button>
+      <button
+        style={{ ...buttonStyle, ...(hover ? buttonHover : {}) }}
+        onClick={send}
+        onMouseEnter={() => setHover(true)}
+        onMouseLeave={() => setHover(false)}
+      >
+        Send
+      </button>
     </div>
   );
 }

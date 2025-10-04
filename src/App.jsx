@@ -1,65 +1,85 @@
 import React, { useState } from "react";
 import Auth from "./components/Auth";
-import MentorSwipe from "./components/MentorSwipe";
 import Quiz from "./components/Quiz";
 import Chat from "./components/Chat";
 
-function App() {
-  const [stage, setStage] = useState("auth");
-  const [selectedMentor, setSelectedMentor] = useState(null);
-  const [quizScore, setQuizScore] = useState(null);
+// temporary swipe mock
+function MentorSwipe({ onSelectMentor }) {
+  const mentors = ["Alice", "Bob", "Charlie"];
 
-  const containerStyle = {
-    background: "linear-gradient(135deg, #7b0f1d, #3d0a0a)",
-    minHeight: "100vh",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    fontFamily: "'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
-  };
-
-  const cardStyle = {
-    background: "#fff",
-    padding: "30px",
-    borderRadius: "18px",
-    boxShadow: "0 10px 30px rgba(0,0,0,0.25)",
-    width: "400px",
-    textAlign: "center",
+  const styles = {
+    container: {
+      backgroundColor: "#0b0b0b",
+      color: "#fff",
+      fontFamily: "Poppins, sans-serif",
+      minHeight: "100vh",
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    button: {
+      margin: "10px",
+      padding: "12px 20px",
+      border: "none",
+      borderRadius: "10px",
+      backgroundColor: "#b6ff0d",
+      color: "#000",
+      fontWeight: "600",
+      cursor: "pointer",
+    },
   };
 
   return (
-    <div style={containerStyle}>
-      <div style={cardStyle}>
-        {stage === "auth" && <Auth onAuth={() => setStage("swipe")} />}
-
-        {stage === "swipe" && (
-          <MentorSwipe
-            onSwipeRight={(m) => {
-              setSelectedMentor(m);
-              setStage("quiz");
-            }}
-          />
-        )}
-
-        {stage === "quiz" && (
-          <Quiz
-            onComplete={(score) => {
-              setQuizScore(score);
-              setStage("chat");
-            }}
-          />
-        )}
-
-        {stage === "chat" && (
-          <div>
-            <h3 style={{ color: "#7b0f1d" }}>Mentor: {selectedMentor?.name}</h3>
-            <p style={{ fontWeight: "600" }}>Your Quiz Score: {quizScore}</p>
-            <Chat />
-          </div>
-        )}
-      </div>
+    <div style={styles.container}>
+      <h2 style={{ color: "#b6ff0d" }}>Choose a Mentor</h2>
+      {mentors.map((m, i) => (
+        <button key={i} style={styles.button} onClick={() => onSelectMentor(m)}>
+          {m}
+        </button>
+      ))}
     </div>
   );
 }
 
-export default App;
+export default function App() {
+  const [stage, setStage] = useState("auth");
+  const [user, setUser] = useState(null);
+  const [mentor, setMentor] = useState(null);
+  const [quizScore, setQuizScore] = useState(null);
+
+  return (
+    <div>
+      {stage === "auth" && (
+        <Auth
+          onLogin={(email) => {
+            setUser(email);
+            setStage("swipe");
+          }}
+        />
+      )}
+
+      {stage === "swipe" && (
+        <MentorSwipe
+          onSelectMentor={(m) => {
+            setMentor(m);
+            setStage("quiz");
+          }}
+        />
+      )}
+
+      {stage === "quiz" && (
+        <Quiz
+          onComplete={(score) => {
+            setQuizScore(score);
+            setStage("chat");
+          }}
+        />
+      )}
+
+      {stage === "chat" && (
+        <Chat user={user} mentor={mentor} score={quizScore} />
+      )}
+    </div>
+  );
+}
