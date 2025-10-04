@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Navbar from "./Navbar"; // import the separated Navbar
 
 const Auth = ({ onLogin }) => {
   const [email, setEmail] = useState("");
@@ -12,6 +11,7 @@ const Auth = ({ onLogin }) => {
     display: "flex",
     flexDirection: "column",
     fontFamily: "'Poppins', sans-serif",
+    paddingTop: "5px", // top padding for global navbar
   };
 
   const mainSectionStyle = {
@@ -86,9 +86,6 @@ const Auth = ({ onLogin }) => {
 
   return (
     <div style={containerStyle}>
-      {/* Navbar */}
-      <Navbar />
-
       {/* Main Section */}
       <div style={mainSectionStyle}>
         {/* Left Side Text */}

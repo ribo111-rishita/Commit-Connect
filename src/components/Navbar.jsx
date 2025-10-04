@@ -4,12 +4,18 @@ import logo from "../assets/img.png";
 const Navbar = () => {
   const navbarStyle = {
     width: "100%",
+    backgroundColor: "#000", // ✅ black background
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    padding: "20px 5%", // use percentage for responsiveness
+    padding: "10px 2% 10px 2%", // ✅ reduced padding for less height
     borderBottom: "1px solid #1f1f1f",
-    boxSizing: "border-box", // important to prevent overflow
+    boxSizing: "border-box",
+    position: "fixed", // ✅ keeps navbar at top
+    top: 0,
+    left: 0,
+    zIndex: 1000,
+    boxShadow: "0 2px 10px rgba(0,0,0,0.4)", // subtle shadow for depth
   };
 
   const logoContainerStyle = {
@@ -33,11 +39,12 @@ const Navbar = () => {
 
   const navLinksStyle = {
     display: "flex",
-    gap: "30px", // reduced gap for better fit
+    gap: "30px",
     alignItems: "center",
     color: "#fff",
     fontSize: "15px",
-    flexWrap: "wrap", // wrap on smaller screens
+    flexWrap: "wrap",
+    cursor: "pointer",
   };
 
   const buttonStyle = {
@@ -60,7 +67,7 @@ const Navbar = () => {
         <span>Timeline</span>
         <span>Contact</span>
         <span>FAQs</span>
-        <button style={buttonStyle}>Login</button>
+        {/* <button style={buttonStyle}>Login</button> */}
       </div>
     </div>
   );

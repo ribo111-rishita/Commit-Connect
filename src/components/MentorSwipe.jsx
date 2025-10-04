@@ -1,41 +1,5 @@
 import React, { useState } from "react";
 
-// 🟢 Simple Navbar
-const Navbar = () => {
-  const navbarStyle = {
-    width: "100%",
-    backgroundColor: "#111",
-    borderBottom: "2px solid #c4ff00",
-    color: "#c4ff00",
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: "15px 40px",
-    fontFamily: "'Poppins', sans-serif",
-    position: "fixed",
-    top: 0,
-    left: 0,
-    zIndex: 1000,
-  };
-
-  return (
-    <nav style={navbarStyle}>
-      <h1 style={{ fontWeight: "700", fontSize: "22px" }}>CommitConnect</h1>
-      <div style={{ display: "flex", gap: "30px", fontWeight: "500" }}>
-        <a href="/" style={{ color: "#c4ff00", textDecoration: "none" }}>
-          Home
-        </a>
-        <a href="/mentors" style={{ color: "#c4ff00", textDecoration: "none" }}>
-          Mentors
-        </a>
-        <a href="/profile" style={{ color: "#c4ff00", textDecoration: "none" }}>
-          Profile
-        </a>
-      </div>
-    </nav>
-  );
-};
-
 const MentorSwipe = ({ mentors, onSelectMentor, onViewProfile }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -59,7 +23,7 @@ const MentorSwipe = ({ mentors, onSelectMentor, onViewProfile }) => {
     alignItems: "center",
     fontFamily: "'Poppins', sans-serif",
     flexDirection: "column",
-    padding: "100px 20px 20px", // added top padding for navbar space
+    padding: "100px 20px 20px", // keep top padding for global navbar
   };
 
   const cardStyle = {
@@ -101,43 +65,40 @@ const MentorSwipe = ({ mentors, onSelectMentor, onViewProfile }) => {
   };
 
   return (
-    <>
-      <Navbar />
-      <div style={containerStyle}>
-        <h2 style={{ color: "#c4ff00", marginBottom: "30px" }}>
-          Swipe through Mentors
-        </h2>
+    <div style={containerStyle}>
+      <h2 style={{ color: "#c4ff00", marginBottom: "30px" }}>
+        Swipe through Mentors
+      </h2>
 
-        <div style={cardStyle}>
-          <button
-            style={{ ...swipeButtonStyle, left: "-50px" }}
-            onClick={() => handleSwipe("left")}
-          >
-            ◀
-          </button>
+      <div style={cardStyle}>
+        <button
+          style={{ ...swipeButtonStyle, left: "-50px" }}
+          onClick={() => handleSwipe("left")}
+        >
+          ◀
+        </button>
 
-          <div style={{ fontSize: "22px", fontWeight: "700", marginBottom: "10px" }}>
-            {currentMentor.name}
-          </div>
-
-          <button
-            style={viewProfileButtonStyle}
-            onClick={() => onViewProfile(currentMentor)}
-          >
-            View Profile
-          </button>
-
-          <div style={{ color: "#aaa", marginTop: "15px" }}>{currentMentor.bio}</div>
-
-          <button
-            style={{ ...swipeButtonStyle, right: "-50px" }}
-            onClick={() => handleSwipe("right")}
-          >
-            ▶
-          </button>
+        <div style={{ fontSize: "22px", fontWeight: "700", marginBottom: "10px" }}>
+          {currentMentor.name}
         </div>
+
+        <button
+          style={viewProfileButtonStyle}
+          onClick={() => onViewProfile(currentMentor)}
+        >
+          View Profile
+        </button>
+
+        <div style={{ color: "#aaa", marginTop: "15px" }}>{currentMentor.bio}</div>
+
+        <button
+          style={{ ...swipeButtonStyle, right: "-50px" }}
+          onClick={() => handleSwipe("right")}
+        >
+          ▶
+        </button>
       </div>
-    </>
+    </div>
   );
 };
 
