@@ -90,23 +90,20 @@ const MentorSwipe = ({ mentors, onSelectMentor }) => {
   const nextCardStyle = {
     width: "350px",
     height: "500px",
-    backgroundColor: "#0d1a3a",
-    border: "2px solid #555",
+    backgroundColor: "#111",           // same as main card
+    border: "2px solid #c4ff00",      // green border
     borderRadius: "15px",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
-    opacity: 0.6,
+    position: "absolute",
+    top: "10px",
+    left: "0",
+    opacity: 0.5,                      // slightly transparent for depth
     textAlign: "center",
     overflow: "hidden",
-    filter: "brightness(0.8)",
-    position: "absolute",
-    top: 0,
-    left: 0,
-    zIndex: 1,
-    transform: `scale(${drag.x ? 0.95 + Math.abs(drag.x) / 2000 : 0.95})`,
-    transition: "transform 0.3s ease-in-out, opacity 0.3s ease-in-out",
+    boxShadow: "0 0 15px rgba(196,255,0,0.3)", // subtle green glow
   };
 
   const mentorImageStyle = { width: "100%", height: "220px", objectFit: "cover" };

@@ -3,6 +3,7 @@ import React, { useState } from "react";
 const Auth = ({ onLogin }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [remember, setRemember] = useState(false); // ✅ remember me state
 
   const containerStyle = {
     backgroundColor: "#0a0a0a",
@@ -11,17 +12,16 @@ const Auth = ({ onLogin }) => {
     display: "flex",
     flexDirection: "column",
     fontFamily: "'Poppins', sans-serif",
-    paddingTop: "5px", // top padding for global navbar
+    paddingTop: "5px",
   };
 
   const mainSectionStyle = {
     flexGrow: 1,
     display: "flex",
     justifyContent: "space-between",
-    alignItems: "flex-start", // ⬅️ changed from center
-    padding: "80px 10% 0 10%", // ⬅️ add top padding to move up slightly
+    alignItems: "flex-start",
+    padding: "80px 10% 0 10%",
   };
-  
 
   const leftTextStyle = {
     flex: 1,
@@ -29,8 +29,8 @@ const Auth = ({ onLogin }) => {
   };
 
   const headingStyle = {
-    fontSize: "64px",  
-    fontWeight: "800",  
+    fontSize: "64px",
+    fontWeight: "800",
     color: "#b6ff0d",
     marginBottom: "20px",
     lineHeight: "1.2",
@@ -69,6 +69,16 @@ const Auth = ({ onLogin }) => {
     color: "#fff",
   };
 
+  const checkboxContainer = {
+    display: "flex",
+    alignItems: "center",
+    gap: "8px",
+    marginTop: "10px",
+    fontSize: "14px",
+    color: "#aaa",
+    cursor: "pointer",
+  };
+
   const buttonStyle = {
     backgroundColor: "#c4ff00",
     border: "none",
@@ -77,11 +87,20 @@ const Auth = ({ onLogin }) => {
     fontWeight: "600",
     cursor: "pointer",
     width: "100%",
-    marginTop: "10px",
+    marginTop: "15px",
   };
 
   const handleContinue = () => {
     if (!email) return alert("Please enter your email!");
+
+    if (remember) {
+      // ✅ Save login info
+      localStorage.setItem("user", email);
+    } else {
+      // ✅ Clear previous saved login if unchecked
+      localStorage.removeItem("user");
+    }
+
     onLogin(email);
   };
 
@@ -128,6 +147,17 @@ const Auth = ({ onLogin }) => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
+
+            {/* ✅ Remember me checkbox */}
+            <label style={checkboxContainer}>
+              <input
+                type="checkbox"
+                checked={remember}
+                onChange={() => setRemember(!remember)}
+              />
+              Remember me
+            </label>
+
             <button style={buttonStyle} onClick={handleContinue}>
               Continue
             </button>

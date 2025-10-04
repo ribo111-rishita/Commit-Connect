@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "./components/Navbar";
 import Auth from "./components/Auth";
 import RoleSelection from "./components/RoleSelection";
@@ -15,7 +15,52 @@ export default function App() {
   const [quizScore, setQuizScore] = useState(null);
   const [selectedMentor, setSelectedMentor] = useState(null);
 
-  // Optional: Add top padding if navbar is fixed
+  // ✅ Load saved login info when app starts
+  useEffect(() => {
+    const savedUser = localStorage.getItem("user");
+    const savedRole = localStorage.getItem("role");
+
+    if (savedUser) {
+      setUser(savedUser);
+      setRole(savedRole || null);
+
+      // restore last stage depending on what’s saved
+      if (savedRole && !profileData) {
+        setStage("profile");
+      } else if (savedRole && profileData && !quizScore) {
+        setStage("quiz");
+      } else if (savedRole && quizScore) {
+        setStage("swipe");
+      } else {
+        setStage("role");
+      }
+    }
+  }, [profileData, quizScore]);
+
+  // ✅ Save login info
+  const handleLogin = (email) => {
+    setUser(email);
+    localStorage.setItem("user", email);
+    setStage("role");
+  };
+
+  const handleRoleSelect = (selectedRole) => {
+    setRole(selectedRole);
+    localStorage.setItem("role", selectedRole);
+    setStage("profile");
+  };
+
+  // ✅ Logout clears storage
+  const handleLogout = () => {
+    setUser(null);
+    setRole(null);
+    setProfileData(null);
+    setQuizScore(null);
+    setSelectedMentor(null);
+    localStorage.clear();
+    setStage("auth");
+  };
+
   const mainContainerStyle = {
     paddingTop: "80px", // adjust if navbar height changes
     minHeight: "100vh",
@@ -25,35 +70,21 @@ export default function App() {
 
   return (
     <div>
-      {/* Navbar always visible */}
-      <Navbar />
+      {/* Navbar always visible, pass logout & user */}
+      <Navbar onLogout={handleLogout} user={user} />
 
       {/* Main content */}
       <div style={mainContainerStyle}>
-        {stage === "auth" && (
-          <Auth
-            onLogin={(email) => {
-              setUser(email);
-              setStage("role");
-            }}
-          />
-        )}
+        {stage === "auth" && <Auth onLogin={handleLogin} />}
 
-        {stage === "role" && (
-          <RoleSelection
-            onSelectRole={(selectedRole) => {
-              setRole(selectedRole);
-              setStage("profile");
-            }}
-          />
-        )}
+        {stage === "role" && <RoleSelection onSelectRole={handleRoleSelect} />}
 
         {stage === "profile" && role === "student" && (
           <Profile
             userEmail={user}
             onSubmitProfile={(data) => {
               setProfileData(data);
-              setStage("quiz"); // move directly to quiz after profile
+              setStage("quiz");
             }}
           />
         )}
@@ -62,7 +93,7 @@ export default function App() {
           <Quiz
             onComplete={(score) => {
               setQuizScore(score);
-              setStage("swipe"); // after quiz, go to MentorSwipe
+              setStage("swipe");
             }}
           />
         )}
