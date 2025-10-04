@@ -145,6 +145,155 @@
 // }
 
 
+// import React, { useState } from "react";
+
+// const Profile = ({ userEmail, onSubmitProfile }) => {
+//   const [fullName, setFullName] = useState("");
+//   const [phone, setPhone] = useState("");
+//   const [skills, setSkills] = useState("");
+//   const [github, setGithub] = useState("");
+//   const [leetcode, setLeetcode] = useState("");
+//   const [codeforces, setCodeforces] = useState("");
+
+//   const [focusedInput, setFocusedInput] = useState("");
+
+//   const containerStyle = {
+//     backgroundColor: "#0a0a0a",
+//     color: "#fff",
+//     minHeight: "100vh",
+//     display: "flex",
+//     justifyContent: "center",
+//     alignItems: "center",
+//     fontFamily: "'Poppins', sans-serif",
+//     padding: "20px",
+//   };
+
+//   const cardStyle = {
+//     backgroundColor: "#111",
+//     padding: "40px",
+//     borderRadius: "15px",
+//     boxShadow: "0 0 20px rgba(0,0,0,0.4)",
+//     width: "450px",
+//   };
+
+//   const getInputStyle = (inputName) => ({
+//     width: "100%",
+//     padding: "10px",
+//     margin: "10px 0",
+//     borderRadius: "6px",
+//     border: focusedInput === inputName ? "2px solid #c4ff00" : "1px solid #2f2f2f",
+//     backgroundColor: "#0e0e0e",
+//     color: "#fff",
+//     outline: "none",
+//     transition: "all 0.2s ease",
+//   });
+
+//   const buttonStyle = {
+//     backgroundColor: "#b6ff0e",
+//     border: "none",
+//     padding: "12px",
+//     borderRadius: "8px",
+//     fontWeight: "600",
+//     cursor: "pointer",
+//     width: "100%",
+//     marginTop: "15px",
+//   };
+
+//   const handleSubmit = () => {
+//     if (!fullName || !phone) {
+//       return alert("Please fill in all required fields!");
+//     }
+
+//     const profileData = {
+//       fullName,
+//       phone,
+//       skills: skills.split(",").map((s) => s.trim()),
+//       github,
+//       leetcode,
+//       codeforces,
+//       email: userEmail,
+//     };
+
+//     onSubmitProfile(profileData);
+//   };
+
+//   return (
+//     <div style={containerStyle}>
+//       <div style={cardStyle}>
+//         <h2 style={{ color: "#c4ff00", marginBottom: "10px" }}>Student Profile</h2>
+//         <p style={{ color: "#aaa", fontSize: "14px", marginBottom: "20px" }}>
+//           Fill in your details to create your profile.
+//         </p>
+
+//         <input
+//           type="text"
+//           placeholder="Full Name"
+//           style={getInputStyle("fullName")}
+//           value={fullName}
+//           onFocus={() => setFocusedInput("fullName")}
+//           onBlur={() => setFocusedInput("")}
+//           onChange={(e) => setFullName(e.target.value)}
+//         />
+
+//         <input
+//           type="tel"
+//           placeholder="Phone Number"
+//           style={getInputStyle("phone")}
+//           value={phone}
+//           onFocus={() => setFocusedInput("phone")}
+//           onBlur={() => setFocusedInput("")}
+//           onChange={(e) => setPhone(e.target.value)}
+//         />
+
+//         <input
+//           type="text"
+//           placeholder="Skills (comma separated)"
+//           style={getInputStyle("skills")}
+//           value={skills}
+//           onFocus={() => setFocusedInput("skills")}
+//           onBlur={() => setFocusedInput("")}
+//           onChange={(e) => setSkills(e.target.value)}
+//         />
+
+//         <input
+//           type="url"
+//           placeholder="GitHub Profile URL"
+//           style={getInputStyle("github")}
+//           value={github}
+//           onFocus={() => setFocusedInput("github")}
+//           onBlur={() => setFocusedInput("")}
+//           onChange={(e) => setGithub(e.target.value)}
+//         />
+
+//         <input
+//           type="url"
+//           placeholder="LeetCode Profile URL"
+//           style={getInputStyle("leetcode")}
+//           value={leetcode}
+//           onFocus={() => setFocusedInput("leetcode")}
+//           onBlur={() => setFocusedInput("")}
+//           onChange={(e) => setLeetcode(e.target.value)}
+//         />
+
+//         <input
+//           type="url"
+//           placeholder="Codeforces Profile URL"
+//           style={getInputStyle("codeforces")}
+//           value={codeforces}
+//           onFocus={() => setFocusedInput("codeforces")}
+//           onBlur={() => setFocusedInput("")}
+//           onChange={(e) => setCodeforces(e.target.value)}
+//         />
+
+//         <button style={buttonStyle} onClick={handleSubmit}>
+//           Save Profile
+//         </button>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default Profile;
 import React, { useState } from "react";
 
 const Profile = ({ userEmail, onSubmitProfile }) => {
@@ -154,7 +303,6 @@ const Profile = ({ userEmail, onSubmitProfile }) => {
   const [github, setGithub] = useState("");
   const [leetcode, setLeetcode] = useState("");
   const [codeforces, setCodeforces] = useState("");
-
   const [focusedInput, setFocusedInput] = useState("");
 
   const containerStyle = {
@@ -172,7 +320,7 @@ const Profile = ({ userEmail, onSubmitProfile }) => {
     backgroundColor: "#111",
     padding: "40px",
     borderRadius: "15px",
-    boxShadow: "0 0 20px rgba(0,0,0,0.4)",
+    boxShadow: "0 0 20px rgba(0,255,0,0.2)",
     width: "450px",
   };
 
@@ -181,7 +329,8 @@ const Profile = ({ userEmail, onSubmitProfile }) => {
     padding: "10px",
     margin: "10px 0",
     borderRadius: "6px",
-    border: focusedInput === inputName ? "2px solid #c4ff00" : "1px solid #2f2f2f",
+    border:
+      focusedInput === inputName ? "2px solid #c4ff00" : "1px solid #2f2f2f",
     backgroundColor: "#0e0e0e",
     color: "#fff",
     outline: "none",
@@ -220,7 +369,9 @@ const Profile = ({ userEmail, onSubmitProfile }) => {
   return (
     <div style={containerStyle}>
       <div style={cardStyle}>
-        <h2 style={{ color: "#c4ff00", marginBottom: "10px" }}>Student Profile</h2>
+        <h2 style={{ color: "#c4ff00", marginBottom: "10px" }}>
+          Student Profile
+        </h2>
         <p style={{ color: "#aaa", fontSize: "14px", marginBottom: "20px" }}>
           Fill in your details to create your profile.
         </p>

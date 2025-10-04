@@ -64,7 +64,7 @@ const Navbar = () => {
       </div>
       <div style={navLinksStyle}>
         <span>About</span>
-        <span>Timeline</span>
+        <span>LeaderBoard</span>
         <span>Contact</span>
         <span>FAQs</span>
         {/* <button style={buttonStyle}>Login</button> */}

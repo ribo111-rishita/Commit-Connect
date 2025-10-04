@@ -18,9 +18,10 @@ const Auth = ({ onLogin }) => {
     flexGrow: 1,
     display: "flex",
     justifyContent: "space-between",
-    alignItems: "center",
-    padding: "0 10%",
+    alignItems: "flex-start", // ⬅️ changed from center
+    padding: "80px 10% 0 10%", // ⬅️ add top padding to move up slightly
   };
+  
 
   const leftTextStyle = {
     flex: 1,
@@ -101,7 +102,7 @@ const Auth = ({ onLogin }) => {
             Build your portfolio with projects & showcase your skills.
           </p>
           <p style={{ color: "#b6ff0d", fontSize: "16px", marginTop: "20px" }}>
-            💡 Your journey into open-source starts here.
+            Your journey into open-source starts here.
           </p>
         </div>
 
