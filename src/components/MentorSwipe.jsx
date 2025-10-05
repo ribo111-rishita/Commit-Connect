@@ -1,6 +1,5 @@
 import React, { useState, useRef } from "react";
 import Chat from "./Chat"; // make sure Chat.jsx exists
-import { useNavigate } from "react-router-dom"; // for Challenge navigation
 
 // Demo profile generator
 const getDemoProfile = (mentor, id) => ({
@@ -19,14 +18,13 @@ const getDemoProfile = (mentor, id) => ({
   ],
 });
 
-const MentorSwipe = ({ mentors = [] }) => {
+const MentorSwipe = ({ mentors = [], onTakeChallenge }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedMentorsList, setSelectedMentorsList] = useState([]);
   const [activeChats, setActiveChats] = useState([]);
   const [drag, setDrag] = useState({ x: 0, y: 0 });
   const [viewProfileMentor, setViewProfileMentor] = useState(null); // for modal
   const cardRef = useRef(null);
-  const navigate = useNavigate();
 
   if (!mentors || mentors.length === 0) return null;
 
@@ -160,19 +158,25 @@ const MentorSwipe = ({ mentors = [] }) => {
               <p style={{ color: "#aaa", fontSize: "14px" }}>
                 {currentMentor.bio}
               </p>
-              {/* New buttons */}
+              {/* Buttons */}
               <div style={{ marginTop: "15px" }}>
                 <button
                   style={buttonStyle}
                   onClick={() =>
-                    setViewProfileMentor(getDemoProfile(currentMentor, currentIndex))
+                    setViewProfileMentor(
+                      getDemoProfile(currentMentor, currentIndex)
+                    )
                   }
                 >
                   View Profile
                 </button>
                 <button
                   style={buttonStyle}
-                  onClick={() => navigate("/challenge")}
+                  onClick={() =>
+                    onTakeChallenge(
+                      getDemoProfile(currentMentor, currentIndex)
+                    )
+                  }
                 >
                   Mentor’s Challenge
                 </button>

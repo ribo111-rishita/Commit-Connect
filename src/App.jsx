@@ -15,7 +15,7 @@ export default function App() {
   const [profileData, setProfileData] = useState(null);
   const [quizScore, setQuizScore] = useState(null);
   const [selectedMentor, setSelectedMentor] = useState(null);
-  const [challengeMentor, setChallengeMentor] = useState(null); // new state
+  const [challengeMentor, setChallengeMentor] = useState(null);
   const [isEditingProfile, setIsEditingProfile] = useState(false);
 
   // Load saved login info
@@ -147,7 +147,7 @@ export default function App() {
               setSelectedMentor(mentor);
               alert(`You selected ${mentor.name}!`);
             }}
-            onTakeChallenge={handleTakeChallenge} // pass function to MentorSwipe
+            onTakeChallenge={handleTakeChallenge}
           />
         )}
 
