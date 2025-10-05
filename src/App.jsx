@@ -6,6 +6,7 @@ import Profile from "./components/Profile";
 import Quiz from "./components/Quiz";
 import MentorSwipe from "./components/MentorSwipe";
 import Chatbot from "./components/Chatbot";
+import Challenge from "./components/Challenge";
 
 export default function App() {
   const [stage, setStage] = useState("auth");
@@ -14,9 +15,10 @@ export default function App() {
   const [profileData, setProfileData] = useState(null);
   const [quizScore, setQuizScore] = useState(null);
   const [selectedMentor, setSelectedMentor] = useState(null);
-  const [isEditingProfile, setIsEditingProfile] = useState(false); // ✅ new state
+  const [challengeMentor, setChallengeMentor] = useState(null); // new state
+  const [isEditingProfile, setIsEditingProfile] = useState(false);
 
-  // ✅ Load saved login info when app starts
+  // Load saved login info
   useEffect(() => {
     const savedUser = localStorage.getItem("user");
     const savedRole = localStorage.getItem("role");
@@ -29,78 +31,83 @@ export default function App() {
       setProfileData(savedProfile ? JSON.parse(savedProfile) : null);
       setQuizScore(savedQuiz ? Number(savedQuiz) : null);
 
-      // restore last stage depending on what’s saved
-      if (savedRole && !savedProfile) {
-        setStage("profile");
-      } else if (savedRole && savedProfile && !savedQuiz) {
-        setStage("quiz");
-      } else if (savedRole && savedQuiz) {
-        setStage("swipe");
-      } else {
-        setStage("role");
-      }
+      if (savedRole && !savedProfile) setStage("profile");
+      else if (savedRole && savedProfile && !savedQuiz) setStage("quiz");
+      else if (savedRole && savedQuiz) setStage("swipe");
+      else setStage("role");
     } else {
       setStage("auth");
     }
   }, []);
 
-  // ✅ Save login info
+  // Login
   const handleLogin = (email) => {
     setUser(email);
     localStorage.setItem("user", email);
     setStage("role");
   };
 
+  // Select role
   const handleRoleSelect = (selectedRole) => {
     setRole(selectedRole);
     localStorage.setItem("role", selectedRole);
     setStage("profile");
   };
 
-  // ✅ Save or update profile
+  // Submit profile
   const handleProfileSubmit = (data) => {
     setProfileData(data);
     localStorage.setItem("profileData", JSON.stringify(data));
 
     if (isEditingProfile) {
-      // just update and stay in swipe (or quiz if not done yet)
       setIsEditingProfile(false);
-      if (quizScore) {
-        setStage("swipe");
-      } else {
-        setStage("quiz");
-      }
+      if (quizScore) setStage("swipe");
+      else setStage("quiz");
     } else {
       setStage("quiz");
     }
   };
 
+  // Complete quiz
   const handleQuizComplete = (score) => {
     setQuizScore(score);
     localStorage.setItem("quizScore", score);
     setStage("swipe");
   };
 
-  // ✅ Logout clears storage
+  // Logout
   const handleLogout = () => {
     setUser(null);
     setRole(null);
     setProfileData(null);
     setQuizScore(null);
     setSelectedMentor(null);
+    setChallengeMentor(null);
     setIsEditingProfile(false);
     localStorage.clear();
     setStage("auth");
   };
 
-  // ✅ Edit profile goes back to Profile page with saved data
+  // Edit profile
   const handleEditProfile = () => {
     setIsEditingProfile(true);
     setStage("profile");
   };
 
+  // Start challenge
+  const handleTakeChallenge = (mentor) => {
+    setChallengeMentor(mentor);
+    setStage("challenge");
+  };
+
+  // Complete challenge
+  const handleChallengeComplete = () => {
+    setChallengeMentor(null);
+    setStage("swipe");
+  };
+
   const mainContainerStyle = {
-    paddingTop: "80px", // adjust if navbar height changes
+    paddingTop: "80px",
     minHeight: "100vh",
     backgroundColor: "#0a0a0a",
     color: "#fff",
@@ -108,14 +115,12 @@ export default function App() {
 
   return (
     <div>
-      {/* Navbar always visible, pass logout, user, and edit profile */}
       <Navbar
         user={user}
         onLogout={handleLogout}
         onEditProfile={handleEditProfile}
       />
 
-      {/* Main content */}
       <div style={mainContainerStyle}>
         {stage === "auth" && <Auth onLogin={handleLogin} />}
 
@@ -124,7 +129,7 @@ export default function App() {
         {stage === "profile" && role === "student" && (
           <Profile
             userEmail={user}
-            initialData={profileData} // ✅ pass saved profile to prefill
+            initialData={profileData}
             onSubmitProfile={handleProfileSubmit}
           />
         )}
@@ -142,11 +147,18 @@ export default function App() {
               setSelectedMentor(mentor);
               alert(`You selected ${mentor.name}!`);
             }}
+            onTakeChallenge={handleTakeChallenge} // pass function to MentorSwipe
+          />
+        )}
+
+        {stage === "challenge" && challengeMentor && (
+          <Challenge
+            mentor={challengeMentor}
+            onComplete={handleChallengeComplete}
           />
         )}
       </div>
 
-      {/* Chatbot always visible */}
       <Chatbot />
     </div>
   );

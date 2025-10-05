@@ -59,7 +59,7 @@ const Quiz = ({ onComplete }) => {
 
   return (
     <div style={cardStyle}>
-      <h2 style={{ color: "#c4ff00", marginBottom: "15px" }}>Quick Quiz</h2>
+      <h2 style={{ color: "#c4ff00", marginBottom: "15px" }}>Quick Survey</h2>
       <p style={{ color: "#aaa", marginBottom: "20px" }}>
         {questions[current].q}
       </p>
