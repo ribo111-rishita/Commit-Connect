@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import Chat from "./Chat"; // make sure Chat.jsx exists in same folder or update path
+import Chat from "./Chat"; // make sure Chat.jsx exists in same folder
 
 // Demo profile generator
 const getDemoProfile = (mentor, id) => ({
@@ -21,7 +21,7 @@ const getDemoProfile = (mentor, id) => ({
 const MentorSwipe = ({ mentors = [] }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedMentorsList, setSelectedMentorsList] = useState([]);
-  const [activeChatId, setActiveChatId] = useState(null);
+  const [activeChats, setActiveChats] = useState([]); // store multiple open chats
   const [drag, setDrag] = useState({ x: 0, y: 0 });
   const cardRef = useRef(null);
 
@@ -69,7 +69,13 @@ const MentorSwipe = ({ mentors = [] }) => {
 
   const handleRemoveMentor = (id) => {
     setSelectedMentorsList((prev) => prev.filter((m) => m.id !== id));
-    if (activeChatId === id) setActiveChatId(null);
+    setActiveChats((prev) => prev.filter((chatId) => chatId !== id));
+  };
+
+  const toggleChat = (id) => {
+    setActiveChats((prev) =>
+      prev.includes(id) ? prev.filter((chatId) => chatId !== id) : [...prev, id]
+    );
   };
 
   // --- Styles ---
@@ -166,57 +172,59 @@ const MentorSwipe = ({ mentors = [] }) => {
                 marginBottom: "10px",
                 padding: "10px",
                 borderRadius: "10px",
-                display: "flex",
-                justifyContent: "space-between",
               }}
             >
-              <span>{m.name}</span>
-              <div>
-                <button
-                  onClick={() => setActiveChatId(m.id)}
-                  style={{
-                    marginRight: "8px",
-                    background: "#c4ff00",
-                    border: "none",
-                    padding: "5px 10px",
-                    borderRadius: "8px",
-                  }}
-                >
-                  Chat
-                </button>
-                <button
-                  onClick={() => handleRemoveMentor(m.id)}
-                  style={{
-                    background: "red",
-                    border: "none",
-                    padding: "5px 10px",
-                    borderRadius: "8px",
-                    color: "#fff",
-                  }}
-                >
-                  Remove
-                </button>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <span>{m.name}</span>
+                <div>
+                  <button
+                    onClick={() => toggleChat(m.id)}
+                    style={{
+                      marginRight: "8px",
+                      background: "#c4ff00",
+                      border: "none",
+                      padding: "5px 10px",
+                      borderRadius: "8px",
+                    }}
+                  >
+                    {activeChats.includes(m.id) ? "Close Chat" : "Chat"}
+                  </button>
+                  <button
+                    onClick={() => handleRemoveMentor(m.id)}
+                    style={{
+                      background: "red",
+                      border: "none",
+                      padding: "5px 10px",
+                      borderRadius: "8px",
+                      color: "#fff",
+                    }}
+                  >
+                    Remove
+                  </button>
+                </div>
               </div>
+
+              {/* Individual Chat Box */}
+              {activeChats.includes(m.id) && (
+                <div
+                  style={{
+                    marginTop: "10px",
+                    border: "1px solid #c4ff00",
+                    borderRadius: "10px",
+                    padding: "10px",
+                  }}
+                >
+                  <Chat mentor={m} />
+                </div>
+              )}
             </div>
           ))
-        )}
-
-        {/* Chat Box for selected mentor */}
-        {activeChatId && (
-          <div
-            style={{
-              marginTop: "20px",
-              border: "1px solid #c4ff00",
-              borderRadius: "10px",
-              padding: "15px",
-            }}
-          >
-            <h4 style={{ marginBottom: "10px", color: "#c4ff00" }}>
-              Chat with{" "}
-              {selectedMentorsList.find((m) => m.id === activeChatId)?.name}
-            </h4>
-            <Chat mentorId={activeChatId} />
-          </div>
         )}
       </div>
     </div>
