@@ -1,10 +1,9 @@
 import React, { useState, useRef } from "react";
-import Chat from "./Chat"; // make sure Chat.jsx exists
 
-// Demo profile generator
+// Helper to generate a complete mentor profile
 const getDemoProfile = (mentor, id) => ({
   id,
-  name: mentor.name,
+  name: mentor.name || `Mentor ${id + 1}`,
   image: mentor.image || "https://via.placeholder.com/400x220?text=Mentor",
   bio:
     mentor.bio ||
@@ -21,9 +20,8 @@ const getDemoProfile = (mentor, id) => ({
 const MentorSwipe = ({ mentors = [], onTakeChallenge }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedMentorsList, setSelectedMentorsList] = useState([]);
-  const [activeChats, setActiveChats] = useState([]);
   const [drag, setDrag] = useState({ x: 0, y: 0 });
-  const [viewProfileMentor, setViewProfileMentor] = useState(null); // for modal
+  const [viewProfileMentor, setViewProfileMentor] = useState(null);
   const cardRef = useRef(null);
 
   if (!mentors || mentors.length === 0) return null;
@@ -70,13 +68,6 @@ const MentorSwipe = ({ mentors = [], onTakeChallenge }) => {
 
   const handleRemoveMentor = (id) => {
     setSelectedMentorsList((prev) => prev.filter((m) => m.id !== id));
-    setActiveChats((prev) => prev.filter((chatId) => chatId !== id));
-  };
-
-  const toggleChat = (id) => {
-    setActiveChats((prev) =>
-      prev.includes(id) ? prev.filter((chatId) => chatId !== id) : [...prev, id]
-    );
   };
 
   // --- Styles ---
@@ -220,17 +211,19 @@ const MentorSwipe = ({ mentors = [], onTakeChallenge }) => {
               >
                 <span>{m.name}</span>
                 <div>
+                  {/* Challenge button */}
                   <button
-                    onClick={() => toggleChat(m.id)}
+                    onClick={() => onTakeChallenge(m)}
                     style={{
                       marginRight: "8px",
                       background: "#c4ff00",
                       border: "none",
                       padding: "5px 10px",
                       borderRadius: "8px",
+                      cursor: "pointer",
                     }}
                   >
-                    {activeChats.includes(m.id) ? "Close Chat" : "Chat"}
+                    Challenge
                   </button>
                   <button
                     onClick={() => handleRemoveMentor(m.id)}
@@ -240,25 +233,13 @@ const MentorSwipe = ({ mentors = [], onTakeChallenge }) => {
                       padding: "5px 10px",
                       borderRadius: "8px",
                       color: "#fff",
+                      cursor: "pointer",
                     }}
                   >
                     Remove
                   </button>
                 </div>
               </div>
-
-              {activeChats.includes(m.id) && (
-                <div
-                  style={{
-                    marginTop: "10px",
-                    border: "1px solid #c4ff00",
-                    borderRadius: "10px",
-                    padding: "10px",
-                  }}
-                >
-                  <Chat mentor={m} />
-                </div>
-              )}
             </div>
           ))
         )}
