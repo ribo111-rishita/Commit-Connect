@@ -1,9 +1,10 @@
 import React, { useState, useRef } from "react";
-import Chat from "./Chat"; // make sure Chat.jsx exists in same folder
+import Chat from "./Chat"; // make sure Chat.jsx exists
+import { useNavigate } from "react-router-dom"; // for Challenge navigation
 
 // Demo profile generator
 const getDemoProfile = (mentor, id) => ({
-  id, // ensure unique ID
+  id,
   name: mentor.name,
   image: mentor.image || "https://via.placeholder.com/400x220?text=Mentor",
   bio:
@@ -21,9 +22,11 @@ const getDemoProfile = (mentor, id) => ({
 const MentorSwipe = ({ mentors = [] }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedMentorsList, setSelectedMentorsList] = useState([]);
-  const [activeChats, setActiveChats] = useState([]); // store multiple open chats
+  const [activeChats, setActiveChats] = useState([]);
   const [drag, setDrag] = useState({ x: 0, y: 0 });
+  const [viewProfileMentor, setViewProfileMentor] = useState(null); // for modal
   const cardRef = useRef(null);
+  const navigate = useNavigate();
 
   if (!mentors || mentors.length === 0) return null;
 
@@ -109,7 +112,7 @@ const MentorSwipe = ({ mentors = [] }) => {
 
   const cardStyle = {
     width: "360px",
-    height: "500px",
+    height: "520px",
     backgroundColor: "#111",
     borderRadius: "25px",
     display: "flex",
@@ -121,13 +124,24 @@ const MentorSwipe = ({ mentors = [] }) => {
     transform: `translate(${drag.x}px, ${drag.y}px) rotate(${drag.x / 25}deg)`,
     transition: drag.x === 0 ? "transform 0.4s" : "transform 0.1s",
     cursor: "grab",
+    paddingBottom: "15px",
+  };
+
+  const buttonStyle = {
+    background: "#c4ff00",
+    border: "none",
+    padding: "8px 15px",
+    margin: "5px",
+    borderRadius: "8px",
+    cursor: "pointer",
+    fontWeight: "600",
   };
 
   return (
     <div style={containerStyle}>
       {/* Left column - Swipe card */}
       <div style={leftColumnStyle}>
-        <div style={{ width: "360px", height: "500px" }}>
+        <div style={{ width: "360px", height: "520px" }}>
           <div
             ref={cardRef}
             style={cardStyle}
@@ -143,11 +157,30 @@ const MentorSwipe = ({ mentors = [] }) => {
             />
             <div style={{ padding: "20px" }}>
               <h2>{currentMentor.name}</h2>
-              <p style={{ color: "#aaa" }}>{currentMentor.bio}</p>
+              <p style={{ color: "#aaa", fontSize: "14px" }}>
+                {currentMentor.bio}
+              </p>
+              {/* New buttons */}
+              <div style={{ marginTop: "15px" }}>
+                <button
+                  style={buttonStyle}
+                  onClick={() =>
+                    setViewProfileMentor(getDemoProfile(currentMentor, currentIndex))
+                  }
+                >
+                  View Profile
+                </button>
+                <button
+                  style={buttonStyle}
+                  onClick={() => navigate("/challenge")}
+                >
+                  Mentor’s Challenge
+                </button>
+              </div>
             </div>
           </div>
         </div>
-        <p style={{ color: "#c4ff00", marginTop: "10px" }}>
+        <p style={{ color: "#c4ff00", marginTop: "40px" }}>
           Swipe ⬅️ Skip | Swipe ➡️ Select
         </p>
       </div>
@@ -210,7 +243,6 @@ const MentorSwipe = ({ mentors = [] }) => {
                 </div>
               </div>
 
-              {/* Individual Chat Box */}
               {activeChats.includes(m.id) && (
                 <div
                   style={{
@@ -227,6 +259,70 @@ const MentorSwipe = ({ mentors = [] }) => {
           ))
         )}
       </div>
+
+      {/* Profile Modal */}
+      {viewProfileMentor && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100vw",
+            height: "100vh",
+            background: "rgba(0,0,0,0.7)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 1000,
+          }}
+          onClick={() => setViewProfileMentor(null)}
+        >
+          <div
+            style={{
+              background: "#111",
+              padding: "30px",
+              borderRadius: "20px",
+              width: "450px",
+              maxHeight: "80vh",
+              overflowY: "auto",
+              color: "#fff",
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h2 style={{ color: "#c4ff00" }}>{viewProfileMentor.name}</h2>
+            <p style={{ marginBottom: "10px" }}>
+              <strong>Bio:</strong> {viewProfileMentor.bio}
+            </p>
+            <p style={{ marginBottom: "10px" }}>
+              <strong>Skills:</strong> {viewProfileMentor.skills}
+            </p>
+            <p style={{ marginBottom: "10px" }}>
+              <strong>Experience:</strong> {viewProfileMentor.experience}
+            </p>
+            <h4 style={{ marginTop: "15px", marginBottom: "8px" }}>Reviews:</h4>
+            <ul>
+              {viewProfileMentor.reviews.map((r, i) => (
+                <li key={i} style={{ marginBottom: "6px", color: "#aaa" }}>
+                  <strong>{r.student}:</strong> {r.comment}
+                </li>
+              ))}
+            </ul>
+            <button
+              style={{
+                marginTop: "15px",
+                background: "#c4ff00",
+                border: "none",
+                padding: "8px 15px",
+                borderRadius: "8px",
+                cursor: "pointer",
+              }}
+              onClick={() => setViewProfileMentor(null)}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

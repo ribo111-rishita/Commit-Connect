@@ -13,7 +13,7 @@ const Chat = ({ mentor }) => {
     setTimeout(() => {
       setMessages((prev) => [
         ...prev,
-        { sender: mentor.name, text: "Thanks for your message!" },
+        { sender: mentor.name, text: "Hey there! Once your profile is shortlisted,the mentor will revert back.Thank you!" },
       ]);
     }, 800);
   };
