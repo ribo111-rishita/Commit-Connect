@@ -90,8 +90,8 @@ const MentorSwipe = ({ mentors, onSelectMentor }) => {
   const nextCardStyle = {
     width: "350px",
     height: "500px",
-    backgroundColor: "#111",           // same as main card
-    border: "2px solid #c4ff00",      // green border
+    backgroundColor: "#111",
+    border: "2px solid #c4ff00",
     borderRadius: "15px",
     display: "flex",
     flexDirection: "column",
@@ -100,10 +100,10 @@ const MentorSwipe = ({ mentors, onSelectMentor }) => {
     position: "absolute",
     top: "10px",
     left: "0",
-    opacity: 0.5,                      // slightly transparent for depth
+    opacity: 0.5,
     textAlign: "center",
     overflow: "hidden",
-    boxShadow: "0 0 15px rgba(196,255,0,0.3)", // subtle green glow
+    boxShadow: "0 0 15px rgba(196,255,0,0.3)",
   };
 
   const mentorImageStyle = { width: "100%", height: "220px", objectFit: "cover" };
@@ -141,6 +141,20 @@ const MentorSwipe = ({ mentors, onSelectMentor }) => {
     textAlign: "center",
     boxShadow: "0 0 20px rgba(0,255,0,0.2)",
     color: "#fff",
+    position: "relative",
+  };
+
+  const closeButtonStyle = {
+    position: "absolute",
+    top: "15px",
+    left: "15px",
+    backgroundColor: "#c4ff00",
+    color: "#000",
+    border: "none",
+    borderRadius: "8px",
+    padding: "5px 10px",
+    fontWeight: "600",
+    cursor: "pointer",
   };
 
   const reviewStyle = {
@@ -163,7 +177,6 @@ const MentorSwipe = ({ mentors, onSelectMentor }) => {
       <h2 style={{ color: "#c4ff00", marginBottom: "30px" }}>Swipe through Mentors</h2>
 
       <div style={cardContainerStyle}>
-        {/* Next Mentor Preview */}
         <div style={nextCardStyle}>
           <img src={nextMentor.image} alt={nextMentor.name} style={mentorImageStyle} />
           <div style={{ fontSize: "20px", fontWeight: "600", marginTop: "10px" }}>
@@ -171,7 +184,6 @@ const MentorSwipe = ({ mentors, onSelectMentor }) => {
           </div>
         </div>
 
-        {/* Current Mentor Card */}
         <div
           ref={cardRef}
           style={cardStyle}
@@ -201,7 +213,10 @@ const MentorSwipe = ({ mentors, onSelectMentor }) => {
       {selectedMentor && (
         <div style={modalOverlayStyle} onClick={() => setSelectedMentor(null)}>
           <div style={modalContentStyle} onClick={(e) => e.stopPropagation()}>
-            <h2 style={{ color: "#c4ff00", marginBottom: "15px" }}>{selectedMentor.name}</h2>
+            <button style={closeButtonStyle} onClick={() => setSelectedMentor(null)}>
+              Close
+            </button>
+            <h2 style={{ color: "#c4ff00", marginBottom: "15px" }}>Mentor's Profile</h2>
             <img
               src={selectedMentor.image}
               alt={selectedMentor.name}
@@ -213,7 +228,6 @@ const MentorSwipe = ({ mentors, onSelectMentor }) => {
               Experience: {selectedMentor.experience}
             </p>
 
-            {/* Reviews */}
             <div style={reviewStyle}>
               <h3 style={{ color: "#c4ff00", marginBottom: "10px" }}>Reviews</h3>
               {selectedMentor.reviews.map((r, i) => (
@@ -223,13 +237,6 @@ const MentorSwipe = ({ mentors, onSelectMentor }) => {
                 </div>
               ))}
             </div>
-
-            <button
-              style={{ ...viewProfileButtonStyle, marginTop: "20px" }}
-              onClick={() => setSelectedMentor(null)}
-            >
-              Close
-            </button>
           </div>
         </div>
       )}

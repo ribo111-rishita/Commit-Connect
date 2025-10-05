@@ -294,15 +294,15 @@
 // };
 
 // export default Profile;
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-const Profile = ({ userEmail, onSubmitProfile }) => {
-  const [fullName, setFullName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [skills, setSkills] = useState("");
-  const [github, setGithub] = useState("");
-  const [leetcode, setLeetcode] = useState("");
-  const [codeforces, setCodeforces] = useState("");
+const Profile = ({ userEmail, initialData, onSubmitProfile, onCancel }) => {
+  const [fullName, setFullName] = useState(initialData?.fullName || "");
+  const [phone, setPhone] = useState(initialData?.phone || "");
+  const [skills, setSkills] = useState(initialData?.skills?.join(", ") || "");
+  const [github, setGithub] = useState(initialData?.github || "");
+  const [leetcode, setLeetcode] = useState(initialData?.leetcode || "");
+  const [codeforces, setCodeforces] = useState(initialData?.codeforces || "");
   const [focusedInput, setFocusedInput] = useState("");
 
   const containerStyle = {
@@ -348,6 +348,18 @@ const Profile = ({ userEmail, onSubmitProfile }) => {
     marginTop: "15px",
   };
 
+  const cancelButtonStyle = {
+    backgroundColor: "#333",
+    border: "none",
+    padding: "12px",
+    borderRadius: "8px",
+    fontWeight: "600",
+    cursor: "pointer",
+    width: "100%",
+    marginTop: "10px",
+    color: "#fff",
+  };
+
   const handleSubmit = () => {
     if (!fullName || !phone) {
       return alert("Please fill in all required fields!");
@@ -373,7 +385,7 @@ const Profile = ({ userEmail, onSubmitProfile }) => {
           Student Profile
         </h2>
         <p style={{ color: "#aaa", fontSize: "14px", marginBottom: "20px" }}>
-          Fill in your details to create your profile.
+          Fill in your details to create or update your profile.
         </p>
 
         <input
@@ -438,6 +450,9 @@ const Profile = ({ userEmail, onSubmitProfile }) => {
 
         <button style={buttonStyle} onClick={handleSubmit}>
           Save Profile
+        </button>
+        <button style={cancelButtonStyle} onClick={onCancel}>
+          Cancel
         </button>
       </div>
     </div>

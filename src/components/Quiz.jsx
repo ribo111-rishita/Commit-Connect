@@ -27,8 +27,8 @@ const Quiz = ({ onComplete }) => {
   const [current, setCurrent] = useState(0);
 
   const handleAnswer = () => {
-    if (current  < questions.length) {
-      setCurrent(current);
+    if (current + 1 < questions.length) {
+      setCurrent(current + 1);
     } else {
       onComplete(); // proceed to Mentor Selection after last question
     }

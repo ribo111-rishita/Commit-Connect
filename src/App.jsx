@@ -14,28 +14,35 @@ export default function App() {
   const [profileData, setProfileData] = useState(null);
   const [quizScore, setQuizScore] = useState(null);
   const [selectedMentor, setSelectedMentor] = useState(null);
+  const [isEditingProfile, setIsEditingProfile] = useState(false); // ✅ new state
 
   // ✅ Load saved login info when app starts
   useEffect(() => {
     const savedUser = localStorage.getItem("user");
     const savedRole = localStorage.getItem("role");
+    const savedProfile = localStorage.getItem("profileData");
+    const savedQuiz = localStorage.getItem("quizScore");
 
     if (savedUser) {
       setUser(savedUser);
       setRole(savedRole || null);
+      setProfileData(savedProfile ? JSON.parse(savedProfile) : null);
+      setQuizScore(savedQuiz ? Number(savedQuiz) : null);
 
       // restore last stage depending on what’s saved
-      if (savedRole && !profileData) {
+      if (savedRole && !savedProfile) {
         setStage("profile");
-      } else if (savedRole && profileData && !quizScore) {
+      } else if (savedRole && savedProfile && !savedQuiz) {
         setStage("quiz");
-      } else if (savedRole && quizScore) {
+      } else if (savedRole && savedQuiz) {
         setStage("swipe");
       } else {
         setStage("role");
       }
+    } else {
+      setStage("auth");
     }
-  }, [profileData, quizScore]);
+  }, []);
 
   // ✅ Save login info
   const handleLogin = (email) => {
@@ -50,6 +57,30 @@ export default function App() {
     setStage("profile");
   };
 
+  // ✅ Save or update profile
+  const handleProfileSubmit = (data) => {
+    setProfileData(data);
+    localStorage.setItem("profileData", JSON.stringify(data));
+
+    if (isEditingProfile) {
+      // just update and stay in swipe (or quiz if not done yet)
+      setIsEditingProfile(false);
+      if (quizScore) {
+        setStage("swipe");
+      } else {
+        setStage("quiz");
+      }
+    } else {
+      setStage("quiz");
+    }
+  };
+
+  const handleQuizComplete = (score) => {
+    setQuizScore(score);
+    localStorage.setItem("quizScore", score);
+    setStage("swipe");
+  };
+
   // ✅ Logout clears storage
   const handleLogout = () => {
     setUser(null);
@@ -57,8 +88,15 @@ export default function App() {
     setProfileData(null);
     setQuizScore(null);
     setSelectedMentor(null);
+    setIsEditingProfile(false);
     localStorage.clear();
     setStage("auth");
+  };
+
+  // ✅ Edit profile goes back to Profile page with saved data
+  const handleEditProfile = () => {
+    setIsEditingProfile(true);
+    setStage("profile");
   };
 
   const mainContainerStyle = {
@@ -70,8 +108,12 @@ export default function App() {
 
   return (
     <div>
-      {/* Navbar always visible, pass logout & user */}
-      <Navbar onLogout={handleLogout} user={user} />
+      {/* Navbar always visible, pass logout, user, and edit profile */}
+      <Navbar
+        user={user}
+        onLogout={handleLogout}
+        onEditProfile={handleEditProfile}
+      />
 
       {/* Main content */}
       <div style={mainContainerStyle}>
@@ -82,21 +124,12 @@ export default function App() {
         {stage === "profile" && role === "student" && (
           <Profile
             userEmail={user}
-            onSubmitProfile={(data) => {
-              setProfileData(data);
-              setStage("quiz");
-            }}
+            initialData={profileData} // ✅ pass saved profile to prefill
+            onSubmitProfile={handleProfileSubmit}
           />
         )}
 
-        {stage === "quiz" && (
-          <Quiz
-            onComplete={(score) => {
-              setQuizScore(score);
-              setStage("swipe");
-            }}
-          />
-        )}
+        {stage === "quiz" && <Quiz onComplete={handleQuizComplete} />}
 
         {stage === "swipe" && (
           <MentorSwipe
