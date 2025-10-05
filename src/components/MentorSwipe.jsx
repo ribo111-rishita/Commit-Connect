@@ -1,4 +1,6 @@
 import React, { useState, useRef } from "react";
+import Chat from "./Chat";
+import Challenge from "./Challenge"; // ✅ import challenge
 
 // Helper to generate a complete mentor profile
 const getDemoProfile = (mentor, id) => ({
@@ -17,11 +19,13 @@ const getDemoProfile = (mentor, id) => ({
   ],
 });
 
-const MentorSwipe = ({ mentors = [], onTakeChallenge }) => {
+const MentorSwipe = ({ mentors = [] }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedMentorsList, setSelectedMentorsList] = useState([]);
+  const [activeChats, setActiveChats] = useState([]);
   const [drag, setDrag] = useState({ x: 0, y: 0 });
   const [viewProfileMentor, setViewProfileMentor] = useState(null);
+  const [activeChallengeMentor, setActiveChallengeMentor] = useState(null); // ✅ challenge state
   const cardRef = useRef(null);
 
   if (!mentors || mentors.length === 0) return null;
@@ -68,6 +72,13 @@ const MentorSwipe = ({ mentors = [], onTakeChallenge }) => {
 
   const handleRemoveMentor = (id) => {
     setSelectedMentorsList((prev) => prev.filter((m) => m.id !== id));
+    setActiveChats((prev) => prev.filter((chatId) => chatId !== id));
+  };
+
+  const toggleChat = (id) => {
+    setActiveChats((prev) =>
+      prev.includes(id) ? prev.filter((chatId) => chatId !== id) : [...prev, id]
+    );
   };
 
   // --- Styles ---
@@ -164,7 +175,7 @@ const MentorSwipe = ({ mentors = [], onTakeChallenge }) => {
                 <button
                   style={buttonStyle}
                   onClick={() =>
-                    onTakeChallenge(
+                    setActiveChallengeMentor(
                       getDemoProfile(currentMentor, currentIndex)
                     )
                   }
@@ -211,9 +222,8 @@ const MentorSwipe = ({ mentors = [], onTakeChallenge }) => {
               >
                 <span>{m.name}</span>
                 <div>
-                  {/* Challenge button */}
                   <button
-                    onClick={() => onTakeChallenge(m)}
+                    onClick={() => toggleChat(m.id)}
                     style={{
                       marginRight: "8px",
                       background: "#c4ff00",
@@ -223,7 +233,7 @@ const MentorSwipe = ({ mentors = [], onTakeChallenge }) => {
                       cursor: "pointer",
                     }}
                   >
-                    Challenge
+                    {activeChats.includes(m.id) ? "Close Chat" : "Chat"}
                   </button>
                   <button
                     onClick={() => handleRemoveMentor(m.id)}
@@ -240,6 +250,20 @@ const MentorSwipe = ({ mentors = [], onTakeChallenge }) => {
                   </button>
                 </div>
               </div>
+
+              {/* Chat window */}
+              {activeChats.includes(m.id) && (
+                <div
+                  style={{
+                    marginTop: "10px",
+                    border: "1px solid #c4ff00",
+                    borderRadius: "10px",
+                    padding: "10px",
+                  }}
+                >
+                  <Chat mentor={m} />
+                </div>
+              )}
             </div>
           ))
         )}
@@ -275,16 +299,10 @@ const MentorSwipe = ({ mentors = [], onTakeChallenge }) => {
             onClick={(e) => e.stopPropagation()}
           >
             <h2 style={{ color: "#c4ff00" }}>{viewProfileMentor.name}</h2>
-            <p style={{ marginBottom: "10px" }}>
-              <strong>Bio:</strong> {viewProfileMentor.bio}
-            </p>
-            <p style={{ marginBottom: "10px" }}>
-              <strong>Skills:</strong> {viewProfileMentor.skills}
-            </p>
-            <p style={{ marginBottom: "10px" }}>
-              <strong>Experience:</strong> {viewProfileMentor.experience}
-            </p>
-            <h4 style={{ marginTop: "15px", marginBottom: "8px" }}>Reviews:</h4>
+            <p><strong>Bio:</strong> {viewProfileMentor.bio}</p>
+            <p><strong>Skills:</strong> {viewProfileMentor.skills}</p>
+            <p><strong>Experience:</strong> {viewProfileMentor.experience}</p>
+            <h4>Reviews:</h4>
             <ul>
               {viewProfileMentor.reviews.map((r, i) => (
                 <li key={i} style={{ marginBottom: "6px", color: "#aaa" }}>
@@ -306,6 +324,29 @@ const MentorSwipe = ({ mentors = [], onTakeChallenge }) => {
               Close
             </button>
           </div>
+        </div>
+      )}
+
+      {/* Challenge Modal */}
+      {activeChallengeMentor && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100vw",
+            height: "100vh",
+            background: "rgba(0,0,0,0.85)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 2000,
+          }}
+        >
+          <Challenge
+            mentor={activeChallengeMentor}
+            onComplete={() => setActiveChallengeMentor(null)}
+          />
         </div>
       )}
     </div>
