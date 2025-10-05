@@ -102,7 +102,7 @@ const Challenge = ({ mentor, onComplete }) => {
   if (completed) {
     return (
       <div style={cardStyle}>
-        <h2 style={{ color: "#c4ff00" }}>🎉 Challenge Complete!</h2>
+        <h2 style={{ color: "#c4ff00" }}>Challenge Complete!</h2>
         <p style={{ margin: "15px 0", color: "#aaa" }}>
           You scored <strong>{score}</strong> out of{" "}
           <strong>{questions.length}</strong>
